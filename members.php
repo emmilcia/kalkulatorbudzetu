@@ -24,25 +24,21 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Pasek boczny -->
-        <nav class="sidebar glass-effect">
+    <div class="app-wrapper">
+        <!-- Pasek górny -->
+        <header class="app-header">
             <div class="logo">
-                <div class="logo-icon">💸</div>
+                <div class="logo-icon">☕</div>
                 <h1>KalkoBudżet</h1>
             </div>
             
-            <ul class="nav-links">
-                <li><a href="index.php"><span class="nav-icon">📊</span> Pulpit</a></li>
-                <li class="active"><a href="members.php"><span class="nav-icon">👥</span> Członkowie rodziny</a></li>
-                <li><a href="reports.php"><span class="nav-icon">📈</span> Raporty</a></li>
-                <li><a href="settings.php"><span class="nav-icon">⚙️</span> Ustawienia bazy</a></li>
-            </ul>
-            
-            <div class="sidebar-footer">
-                <p>Wersja 1.0 (Lokalna)</p>
-            </div>
-        </nav>
+            <nav class="top-nav">
+                <a href="index.php">Pulpit</a>
+                <a href="members.php" class="active">Rodzina</a>
+                <a href="reports.php">Raporty</a>
+                <a href="settings.php">Ustawienia</a>
+            </nav>
+        </header>
 
         <!-- Główna zawartość -->
         <main class="main-content">

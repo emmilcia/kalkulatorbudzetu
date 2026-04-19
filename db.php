@@ -11,7 +11,9 @@ try {
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                color TEXT DEFAULT '#ffffff'
+                color TEXT DEFAULT '#ffffff',
+                avatar TEXT DEFAULT 'cat1',
+                monthly_limit REAL DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS categories (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
