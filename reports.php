@@ -35,6 +35,10 @@ $totals = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 $totalExpense = $totals['expense'] ?? 0;
 $totalIncome = $totals['income'] ?? 0;
 
+$chartLabels = array_column($expensesByCategory, 'name');
+$chartData = array_column($expensesByCategory, 'total');
+$chartColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#64748b', '#84cc16'];
+
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -47,6 +51,7 @@ $totalIncome = $totals['income'] ?? 0;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -108,6 +113,11 @@ $totalIncome = $totals['income'] ?? 0;
                     <div class="section-header">
                         <h3>Wydatki według kategorii</h3>
                     </div>
+                    <?php if (!empty($expensesByCategory)): ?>
+                        <div style="width: 100%; max-width: 320px; margin: 0 auto 2.5rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));">
+                            <canvas id="expenseChart"></canvas>
+                        </div>
+                    <?php endif; ?>
                     <div style="display: flex; flex-direction: column; gap: 1.2rem;">
                         <?php if (empty($expensesByCategory)): ?>
                             <div class="empty-state">
@@ -163,5 +173,64 @@ $totalIncome = $totals['income'] ?? 0;
             </div>
         </main>
     </div>
+
+    <?php if (!empty($expensesByCategory)): ?>
+    <script>
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        // Powielanie kolorów, jeśli kategorii jest więcej niż w predefiniowanej palecie
+        let baseColors = <?= json_encode($chartColors) ?>;
+        let dataCount = <?= count($chartData) ?>;
+        let colors = [];
+        for(let i=0; i<dataCount; i++){ colors.push(baseColors[i % baseColors.length]); }
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: <?= json_encode($chartLabels) ?>,
+                datasets: [{
+                    data: <?= json_encode($chartData) ?>,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 12
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: 'Outfit', size: 12 },
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#1e293b',
+                        bodyColor: '#334155',
+                        bodyFont: { family: 'Outfit', size: 14, weight: 'bold' },
+                        borderColor: '#e2e8f0',
+                        borderWidth: 1,
+                        padding: 12,
+                        boxPadding: 6,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed !== null) {
+                                    label += new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(context.parsed);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <?php endif; ?>
 </body>
 </html>

@@ -147,21 +147,23 @@ $error = $_GET['error'] ?? '';
                 <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                     <section class="glass-effect section-box">
                         <div class="section-header">
-                            <h3>Dodaj nową kategorię</h3>
+                            <h3>Dodaj Kategorię Wydatku 🔴</h3>
                         </div>
-                        <form action="add_category.php" method="POST" class="add-form">
-                            <div class="form-group">
-                                <label for="cat_name">Nazwa kategorii</label>
-                                <input type="text" id="cat_name" name="name" required placeholder="np. Korepetycje">
-                            </div>
-                            <div class="form-group">
-                                <label for="cat_type">Typ wpisu</label>
-                                <select id="cat_type" name="type" required>
-                                    <option value="expense">Wydatek (koszt)</option>
-                                    <option value="income">Wpływ (dochód)</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn-primary full-width">Dodaj kategorię</button>
+                        <form action="add_category.php" method="POST" class="add-form" style="display: flex; gap: 0.5rem; flex-direction: column;">
+                            <input type="hidden" name="type" value="expense">
+                            <input type="text" name="name" required placeholder="np. Zakupy, Czynsz, Raty" style="padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1;">
+                            <button type="submit" class="btn-primary full-width" style="margin-top: 0;">Dodaj wydatek</button>
+                        </form>
+                    </section>
+
+                    <section class="glass-effect section-box">
+                        <div class="section-header">
+                            <h3>Dodaj Kategorię Wpływu 🟢</h3>
+                        </div>
+                        <form action="add_category.php" method="POST" class="add-form" style="display: flex; gap: 0.5rem; flex-direction: column;">
+                            <input type="hidden" name="type" value="income">
+                            <input type="text" name="name" required placeholder="np. Wypłata, Premia, 800+" style="padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1;">
+                            <button type="submit" class="btn-primary full-width" style="margin-top: 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Dodaj wpływ</button>
                         </form>
                     </section>
 
