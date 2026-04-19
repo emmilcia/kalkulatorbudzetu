@@ -36,7 +36,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="index.php"><span class="nav-icon">📊</span> Pulpit</a></li>
                 <li class="active"><a href="members.php"><span class="nav-icon">👥</span> Członkowie rodziny</a></li>
                 <li><a href="reports.php"><span class="nav-icon">📈</span> Raporty</a></li>
-                <li><a href="#"><span class="nav-icon">⚙️</span> Ustawienia bazy</a></li>
+                <li><a href="settings.php"><span class="nav-icon">⚙️</span> Ustawienia bazy</a></li>
             </ul>
             
             <div class="sidebar-footer">
