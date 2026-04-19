@@ -14,10 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($avatar, $valid_avatars)) {
         $avatar = 'cat1';
     }
+    $limit = (float)($_POST['monthly_limit'] ?? 0);
     
     if (trim($name) !== '') {
-        $stmt = $db->prepare("INSERT INTO users (name, color, avatar) VALUES (?, ?, ?)");
-        $stmt->execute([trim($name), $color, $avatar]);
+        $stmt = $db->prepare("INSERT INTO users (name, color, avatar, monthly_limit) VALUES (?, ?, ?, ?)");
+        $stmt->execute([trim($name), $color, $avatar, $limit]);
     }
 }
 

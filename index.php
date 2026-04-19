@@ -1,8 +1,14 @@
 <?php
 require_once 'db.php';
 
-// Pobierz uzytkowników
-$stmt = $db->query("SELECT * FROM users");
+// Pobierz uzytkowników z podliczeniem wydatków w tym miesiącu
+$currentMonth = date('Y-m');
+$stmt = $db->prepare("
+    SELECT u.*, 
+    (SELECT SUM(amount) FROM transactions WHERE user_id = u.id AND type = 'expense' AND date LIKE ?) as spent
+    FROM users u
+");
+$stmt->execute([$currentMonth . '%']);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Pobierz kategorie ułożone w grupy wg typu
@@ -135,15 +141,39 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="users-list">
                         <?php foreach($users as $u): ?>
-                            <div class="user-card">
-                                <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9;">
-                                    <!-- Robohash Cats -->
-                                    <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
+                            <?php 
+                                $userSpent = (float)$u['spent'];
+                                $userLimit = (float)$u['monthly_limit'];
+                                $showLimit = $userLimit > 0;
+                                $percent = $showLimit ? min(100, round(($userSpent / $userLimit) * 100)) : 0;
+                            ?>
+                            <div class="user-card" style="flex-direction: column; align-items: flex-start; gap: 0.8rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
+                                    <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9; width: 40px; height: 40px; flex-shrink: 0;">
+                                        <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
+                                    </div>
+                                    <div class="user-info" style="flex: 1;">
+                                        <h4 style="font-size: 0.95rem;"><?= htmlspecialchars($u['name']) ?></h4>
+                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>44; color: <?= htmlspecialchars($u['color']) ?>; font-size: 0.75rem;">
+                                            <?= $showLimit ? 'Limit: '.number_format($userLimit, 0, ',', ' ').' zł' : 'Aktywny' ?>
+                                        </span>
+                                    </div>
+                                    <div style="font-size: 0.85rem; font-weight: 600;">
+                                        <?= number_format($userSpent, 2, ',', ' ') ?> zł
+                                    </div>
                                 </div>
-                                <div class="user-info">
-                                    <h4><?= htmlspecialchars($u['name']) ?></h4>
-                                    <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>44; color: <?= htmlspecialchars($u['color']) ?>;">Atywny</span>
-                                </div>
+                                
+                                <?php if ($showLimit): ?>
+                                    <div style="width: 100%;">
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.3rem; color: var(--text-secondary);">
+                                            <span>Zużycie limitu</span>
+                                            <span style="font-weight: 600; color: <?= $percent > 90 ? 'var(--red-color)' : 'var(--text-primary)' ?>;"><?= $percent ?>%</span>
+                                        </div>
+                                        <div style="width: 100%; height: 6px; background: #eee; border-radius: 10px; overflow: hidden;">
+                                            <div style="width: <?= $percent ?>%; height: 100%; background: <?= $percent > 90 ? 'var(--red-color)' : htmlspecialchars($u['color']) ?>; border-radius: 10px; transition: width 0.5s ease;"></div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>

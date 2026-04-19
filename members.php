@@ -65,7 +65,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                    <button type="button" class="btn-edit" title="Edytuj członka rodziny" onclick="openEditMemberModal(<?= $u['id'] ?>, '<?= htmlspecialchars(addslashes($u['name'])) ?>', '<?= htmlspecialchars($u['color']) ?>', '<?= htmlspecialchars($u['avatar'] ?? 'micah') ?>')">✎</button>
+                                    <button type="button" class="btn-edit" title="Edytuj członka rodziny" onclick="openEditMemberModal(<?= $u['id'] ?>, '<?= htmlspecialchars(addslashes($u['name'])) ?>', '<?= htmlspecialchars($u['color']) ?>', '<?= htmlspecialchars($u['avatar'] ?? 'micah') ?>', <?= $u['monthly_limit'] ?? 0 ?>)">✎</button>
                                     <form action="delete_member.php" method="POST" style="margin: 0;" onsubmit="return confirm('Na pewno usunąć tę osobę?<?= $u['tx_count'] > 0 ? '\n\nUWAGA: Trwale usunięte zostaną również wszystkie jej wpisy i transakcje (' . $u['tx_count'] . ')!' : '' ?>');">
                                         <input type="hidden" name="id" value="<?= $u['id'] ?>">
                                         <button type="submit" class="btn-delete" title="Usuń członka rodziny">×</button>
@@ -96,10 +96,14 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <label for="name">Imię / Nazwa</label>
                     <input type="text" id="name" name="name" required placeholder="np. Kasia">
                 </div>
-                
                 <div class="form-group">
                     <label for="color">Kolor indentyfikacyjny (awatary i układ)</label>
                     <input type="color" id="color" name="color" value="#3b82f6" style="width: 100%; height: 50px; border: none; border-radius: 12px; cursor: pointer; background: transparent; padding: 0;">
+                </div>
+
+                <div class="form-group">
+                    <label for="monthly_limit">Miesięczny limit wydatków (opcjonalnie)</label>
+                    <input type="number" id="monthly_limit" name="monthly_limit" step="0.01" min="0" placeholder="0.00">
                 </div>
 
                 <div class="form-group">
@@ -137,6 +141,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="form-group">
                     <label for="edit_color">Kolor indentyfikacyjny</label>
                     <input type="color" id="edit_color" name="color" style="width: 100%; height: 50px; border: none; border-radius: 12px; cursor: pointer; background: transparent; padding: 0;">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit_monthly_limit">Miesięczny limit wydatków (opcjonalnie)</label>
+                    <input type="number" id="edit_monthly_limit" name="monthly_limit" step="0.01" min="0" placeholder="0.00">
                 </div>
 
                 <div class="form-group">
@@ -180,10 +189,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         });
 
-        function openEditMemberModal(id, name, color, avatar) {
+        function openEditMemberModal(id, name, color, avatar, limit) {
             document.getElementById('edit_id').value = id;
             document.getElementById('edit_name').value = name;
             document.getElementById('edit_color').value = color;
+            document.getElementById('edit_monthly_limit').value = limit;
             
             let avatarRadio = document.getElementById('edit_avatar_' + avatar);
             if(avatarRadio) avatarRadio.checked = true;

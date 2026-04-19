@@ -37,6 +37,15 @@ try {
             INSERT INTO categories (name, type) VALUES ('Mieszkanie', 'expense'), ('Jedzenie', 'expense'), ('Paliwo i Transport', 'expense'), ('Rozrywka i Hobby', 'expense'), ('Ubrania', 'expense'), ('Edukacja', 'expense'), ('Zdrowie', 'expense');
         ");
     }
+
+    // Migracje dla istniejących baz
+    try {
+        $db->exec("ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT 'cat1'");
+    } catch (Exception $e) {}
+    
+    try {
+        $db->exec("ALTER TABLE users ADD COLUMN monthly_limit REAL DEFAULT 0");
+    } catch (Exception $e) {}
 } catch (Exception $e) {
     die("Błąd połączenia z bazą danych: " . $e->getMessage());
 }

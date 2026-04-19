@@ -16,9 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $avatar = 'cat1';
     }
     
+    $limit = (float)($_POST['monthly_limit'] ?? 0);
+    
     if (trim($name) !== '' && $id > 0) {
-        $stmt = $db->prepare("UPDATE users SET name = ?, color = ?, avatar = ? WHERE id = ?");
-        $stmt->execute([trim($name), $color, $avatar, $id]);
+        $stmt = $db->prepare("UPDATE users SET name = ?, color = ?, avatar = ?, monthly_limit = ? WHERE id = ?");
+        $stmt->execute([trim($name), $color, $avatar, $limit, $id]);
     }
 }
 
