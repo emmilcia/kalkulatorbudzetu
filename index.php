@@ -56,7 +56,7 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <ul class="nav-links">
                 <li class="active"><a href="index.php"><span class="nav-icon">📊</span> Pulpit</a></li>
                 <li><a href="members.php"><span class="nav-icon">👥</span> Członkowie rodziny</a></li>
-                <li><a href="#"><span class="nav-icon">📈</span> Raporty</a></li>
+                <li><a href="reports.php"><span class="nav-icon">📈</span> Raporty</a></li>
                 <li><a href="#"><span class="nav-icon">⚙️</span> Ustawienia bazy</a></li>
             </ul>
             
@@ -140,9 +140,9 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="users-list">
                         <?php foreach($users as $u): ?>
                             <div class="user-card">
-                                <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44;">
-                                    <!-- Awatar bazowany na imieniu (Dicebear API) -->
-                                    <img src="https://api.dicebear.com/7.x/<?= urlencode($u['avatar'] ?? 'avataaars') ?>/svg?seed=<?= urlencode($u['name']) ?>&backgroundColor=b6e3f4,c0aede,d1d4f9" alt="<?= htmlspecialchars($u['name']) ?>">
+                                <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9;">
+                                    <!-- Robohash Cats -->
+                                    <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
                                 </div>
                                 <div class="user-info">
                                     <h4><?= htmlspecialchars($u['name']) ?></h4>

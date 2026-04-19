@@ -35,7 +35,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <ul class="nav-links">
                 <li><a href="index.php"><span class="nav-icon">📊</span> Pulpit</a></li>
                 <li class="active"><a href="members.php"><span class="nav-icon">👥</span> Członkowie rodziny</a></li>
-                <li><a href="#"><span class="nav-icon">📈</span> Raporty</a></li>
+                <li><a href="reports.php"><span class="nav-icon">📈</span> Raporty</a></li>
                 <li><a href="#"><span class="nav-icon">⚙️</span> Ustawienia bazy</a></li>
             </ul>
             
@@ -60,18 +60,21 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php foreach($users as $u): ?>
                             <div class="user-card" style="justify-content: space-between;">
                                 <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44;">
-                                        <img src="https://api.dicebear.com/7.x/<?= urlencode($u['avatar'] ?? 'avataaars') ?>/svg?seed=<?= urlencode($u['name']) ?>&backgroundColor=b6e3f4,c0aede,d1d4f9" alt="<?= htmlspecialchars($u['name']) ?>">
+                                    <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9;">
+                                        <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
                                     </div>
                                     <div class="user-info">
                                         <h4><?= htmlspecialchars($u['name']) ?></h4>
                                         <span style="font-size: 0.8rem; color: #718096; background: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 12px;">Wpisy: <?= $u['tx_count'] ?></span>
                                     </div>
                                 </div>
-                                <form action="delete_member.php" method="POST" style="margin: 0;" onsubmit="return confirm('Na pewno usunąć tę osobę?<?= $u['tx_count'] > 0 ? '\n\nUWAGA: Trwale usunięte zostaną również wszystkie jej wpisy i transakcje (' . $u['tx_count'] . ')!' : '' ?>');">
-                                    <input type="hidden" name="id" value="<?= $u['id'] ?>">
-                                    <button type="submit" class="btn-delete" title="Usuń członka rodziny">×</button>
-                                </form>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <button type="button" class="btn-edit" title="Edytuj członka rodziny" onclick="openEditMemberModal(<?= $u['id'] ?>, '<?= htmlspecialchars(addslashes($u['name'])) ?>', '<?= htmlspecialchars($u['color']) ?>', '<?= htmlspecialchars($u['avatar'] ?? 'micah') ?>')">✎</button>
+                                    <form action="delete_member.php" method="POST" style="margin: 0;" onsubmit="return confirm('Na pewno usunąć tę osobę?<?= $u['tx_count'] > 0 ? '\n\nUWAGA: Trwale usunięte zostaną również wszystkie jej wpisy i transakcje (' . $u['tx_count'] . ')!' : '' ?>');">
+                                        <input type="hidden" name="id" value="<?= $u['id'] ?>">
+                                        <button type="submit" class="btn-delete" title="Usuń członka rodziny">×</button>
+                                    </form>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                         
@@ -104,37 +107,56 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class="form-group">
-                    <label>Styl Awatara</label>
+                    <label>Wybierz Kotka 🐈</label>
                     <div style="display: flex; gap: 1rem; overflow-x: auto; padding: 0.5rem 0;">
+                        <?php for($i=1; $i<=6; $i++): ?>
                         <label style="cursor: pointer; text-align: center;">
-                            <input type="radio" name="avatar" value="avataaars" checked>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Kasia" style="width: 50px; height: 50px; border-radius: 50%; display: block; margin: 0 auto;">
-                            <span style="font-size: 0.8rem;">Klasyczny</span>
+                            <input type="radio" name="avatar" value="cat<?= $i ?>" <?= $i==1 ? 'checked' : '' ?>>
+                            <img src="https://robohash.org/cat<?= $i ?>.png?set=set4&size=60x60" style="width: 50px; height: 50px; border-radius: 50%; display: block; margin: 0 auto; background-color: #f1f5f9; border: 2px solid transparent;">
+                            <span style="font-size: 0.8rem;">Kotek <?= $i ?></span>
                         </label>
-                        <label style="cursor: pointer; text-align: center;">
-                            <input type="radio" name="avatar" value="bottts">
-                            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Kasia" style="width: 50px; height: 50px; border-radius: 50%; display: block; margin: 0 auto;">
-                            <span style="font-size: 0.8rem;">Robot</span>
-                        </label>
-                        <label style="cursor: pointer; text-align: center;">
-                            <input type="radio" name="avatar" value="fun-emoji">
-                            <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Kasia" style="width: 50px; height: 50px; border-radius: 50%; display: block; margin: 0 auto;">
-                            <span style="font-size: 0.8rem;">Emoji</span>
-                        </label>
-                        <label style="cursor: pointer; text-align: center;">
-                            <input type="radio" name="avatar" value="adventurer">
-                            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Kasia" style="width: 50px; height: 50px; border-radius: 50%; display: block; margin: 0 auto;">
-                            <span style="font-size: 0.8rem;">Przygoda</span>
-                        </label>
-                        <label style="cursor: pointer; text-align: center;">
-                            <input type="radio" name="avatar" value="micah">
-                            <img src="https://api.dicebear.com/7.x/micah/svg?seed=Kasia" style="width: 50px; height: 50px; border-radius: 50%; display: block; margin: 0 auto;">
-                            <span style="font-size: 0.8rem;">Elegancki</span>
-                        </label>
+                        <?php endfor; ?>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-primary full-width" style="margin-top: 1rem;">Dodaj osobę!</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal edycji członka -->
+    <div id="editMemberModal" class="modal-overlay hidden">
+        <div class="modal glass-effect">
+            <div class="modal-header">
+                <h3>Edytuj domownika</h3>
+                <button class="close-btn" onclick="closeEditMemberModal()">×</button>
+            </div>
+            <form action="edit_member.php" method="POST" class="add-form">
+                <input type="hidden" id="edit_id" name="id" value="">
+                <div class="form-group">
+                    <label for="edit_name">Imię / Nazwa</label>
+                    <input type="text" id="edit_name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_color">Kolor indentyfikacyjny</label>
+                    <input type="color" id="edit_color" name="color" style="width: 100%; height: 50px; border: none; border-radius: 12px; cursor: pointer; background: transparent; padding: 0;">
+                </div>
+
+                <div class="form-group">
+                    <label>Wybierz Kotka 🐈</label>
+                    <div style="display: flex; gap: 1rem; overflow-x: auto; padding: 0.5rem 0;">
+                        <?php for($i=1; $i<=6; $i++): ?>
+                        <label style="cursor: pointer; text-align: center;">
+                            <input type="radio" name="avatar" id="edit_avatar_cat<?= $i ?>" value="cat<?= $i ?>">
+                            <img src="https://robohash.org/cat<?= $i ?>.png?set=set4&size=60x60" style="width: 50px; height: 50px; border-radius: 50%; display: block; margin: 0 auto; background-color: #f1f5f9; border: 2px solid transparent;">
+                            <span style="font-size: 0.8rem;">Kotek <?= $i ?></span>
+                        </label>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary full-width" style="margin-top: 1rem;">Zapisz zmiany!</button>
             </form>
         </div>
     </div>
@@ -159,6 +181,35 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         document.getElementById('addMemberModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeMemberModal();
+            }
+        });
+
+        function openEditMemberModal(id, name, color, avatar) {
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_color').value = color;
+            
+            let avatarRadio = document.getElementById('edit_avatar_' + avatar);
+            if(avatarRadio) avatarRadio.checked = true;
+
+            document.getElementById('editMemberModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('editMemberModal').style.opacity = '1';
+                document.querySelector('#editMemberModal .modal').style.transform = 'translateY(0)';
+            }, 10);
+        }
+
+        function closeEditMemberModal() {
+            document.getElementById('editMemberModal').style.opacity = '0';
+            document.querySelector('#editMemberModal .modal').style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                document.getElementById('editMemberModal').classList.add('hidden');
+            }, 300);
+        }
+
+        document.getElementById('editMemberModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditMemberModal();
             }
         });
     </script>

@@ -2,9 +2,10 @@
 require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'] ?? 0;
     $name = $_POST['name'] ?? '';
-    // Podstawowa sanitacja koloru HEX
     $color = $_POST['color'] ?? '#3b82f6';
+    
     if (!preg_match('/^#[a-f0-9]{6}$/i', $color)) {
         $color = '#3b82f6';
     }
@@ -15,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $avatar = 'cat1';
     }
     
-    if (trim($name) !== '') {
-        $stmt = $db->prepare("INSERT INTO users (name, color, avatar) VALUES (?, ?, ?)");
-        $stmt->execute([trim($name), $color, $avatar]);
+    if (trim($name) !== '' && $id > 0) {
+        $stmt = $db->prepare("UPDATE users SET name = ?, color = ?, avatar = ? WHERE id = ?");
+        $stmt->execute([trim($name), $color, $avatar, $id]);
     }
 }
 
