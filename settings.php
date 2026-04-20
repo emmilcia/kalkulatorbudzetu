@@ -31,21 +31,32 @@ $error = $_GET['error'] ?? '';
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         @media (max-width: 900px) { .settings-grid { grid-template-columns: 1fr; } }
-        .cat-list { display: flex; flex-direction: column; gap: 0.5rem; }
-        .cat-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); padding: 0.8rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .badge-info { font-size: 0.75rem; background: #e2e8f0; padding: 2px 8px; border-radius: 12px; color: #475569; }
+        .cat-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .cat-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: white; 
+            padding: 1rem 1.25rem; 
+            border-radius: var(--br-md); 
+            border: 1px solid var(--border); 
+            transition: var(--transition);
+        }
+        .cat-item:hover { transform: translateX(5px); border-color: var(--accent); }
+        .badge-info { font-size: 0.8rem; font-weight: 700; background: #f1f5f9; padding: 4px 10px; border-radius: 10px; color: var(--text-muted); }
         
         .alert-error {
-            background-color: #fee2e2;
-            color: #b91c1c;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border: 1px solid #fca5a5;
+            background-color: var(--error);
+            color: white;
+            padding: 1.25rem;
+            border-radius: var(--br-md);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
     </style>
 </head>
@@ -76,26 +87,26 @@ $error = $_GET['error'] ?? '';
 
             <?php if ($error === 'cat_in_use'): ?>
             <div class="alert-error">
-                <span><strong>Błąd:</strong> Nie można usunąć tej kategorii, ponieważ są do niej przypisane istniejące transakcje na pulpicie.</span>
-                <a href="settings.php" style="color: #b91c1c; text-decoration: none; font-weight: bold;">✕</a>
+                <span><strong>Błąd:</strong> Nie można usunąć tej kategorii, ponieważ są do niej przypisane istniejące transakcje.</span>
+                <a href="settings.php" style="color: white; text-decoration: none; font-size: 1.5rem; line-height: 1;">✕</a>
             </div>
             <?php endif; ?>
 
             <div class="dashboard-cards" style="margin-bottom: 2rem;">
                 <div class="card glass-effect gradient-blue">
                     <div class="card-icon">🗄️</div>
-                    <h3>Rozmiar Bazy Danych</h3>
-                    <p class="amount" style="font-size: 1.5rem;"><?= $dbSize ?> KB</p>
+                    <h3>Rozmiar Bazy</h3>
+                    <p class="amount"><?= $dbSize ?> KB</p>
                 </div>
                 <div class="card glass-effect gradient-red">
                     <div class="card-icon">📝</div>
-                    <h3>Zapisane Zdarzenia</h3>
-                    <p class="amount" style="font-size: 1.5rem;"><?= $txCount ?> wpisów</p>
+                    <h3>Liczba Wpisów</h3>
+                    <p class="amount"><?= $txCount ?></p>
                 </div>
                 <div class="card glass-effect gradient-green">
                     <div class="card-icon">👩‍👦</div>
-                    <h3>Zarejestrowani Domownicy</h3>
-                    <p class="amount" style="font-size: 1.5rem;"><?= $usersCount ?> osób</p>
+                    <h3>Domownicy</h3>
+                    <p class="amount"><?= $usersCount ?></p>
                 </div>
             </div>
 

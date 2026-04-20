@@ -72,33 +72,33 @@ $chartColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'
 
         <!-- Główna zawartość -->
         <main class="main-content">
-            <header class="topbar" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+            <header class="topbar" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;">
                 <div>
-                    <h2 class="greeting">Raporty i analizy 📈</h2>
-                    <p class="subtitle">Zarządzaj i poznaj szczegóły domowego budżetu.</p>
+                    <h2 class="greeting">Raporty 📈</h2>
+                    <p class="subtitle">Poznaj historię swojego domowego budżetu.</p>
                 </div>
                 <!-- Wybór miesiąca -->
-                <form method="GET" style="display: flex; gap: 0.5rem; align-items: center; background: white; padding: 0.5rem 1rem; border-radius: 50px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-                    <label for="month" style="margin: 0; font-size: 0.9rem;">Miesiąc:</label>
-                    <input type="month" id="month" name="month" value="<?= htmlspecialchars($month) ?>" onchange="this.form.submit()" style="padding: 0.3rem; border: none; background: transparent; width: auto; font-family: inherit; font-weight: 600; cursor: pointer;">
+                <form method="GET" style="display: flex; gap: 0.75rem; align-items: center; background: var(--surface); padding: 0.6rem 1.4rem; border-radius: var(--br-full); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+                    <label for="month" style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--primary);">Miesiąc:</label>
+                    <input type="month" id="month" name="month" value="<?= htmlspecialchars($month) ?>" onchange="this.form.submit()" style="padding: 0.3rem; border: none; background: transparent; width: auto; font-family: inherit; font-weight: 800; cursor: pointer; color: var(--accent);">
                 </form>
             </header>
 
             <div class="dashboard-cards" style="margin-bottom: 2rem;">
                 <div class="card glass-effect gradient-green">
                     <div class="card-icon">💎</div>
-                    <h3>Suma wpływów</h3>
-                    <p class="amount" style="color: var(--green-color);">+<?= number_format($totalIncome, 2, ',', ' ') ?> PLN</p>
+                    <h3>Wpływy</h3>
+                    <p class="amount">+<?= number_format($totalIncome, 2, ',', ' ') ?> PLN</p>
                 </div>
                 <div class="card glass-effect gradient-red">
                     <div class="card-icon">🛒</div>
-                    <h3>Suma wydatków</h3>
-                    <p class="amount" style="color: var(--red-color);">-<?= number_format($totalExpense, 2, ',', ' ') ?> PLN</p>
+                    <h3>Wydatki</h3>
+                    <p class="amount">-<?= number_format($totalExpense, 2, ',', ' ') ?> PLN</p>
                 </div>
                 <div class="card glass-effect gradient-blue">
                     <div class="card-icon">⚖️</div>
-                    <h3>Bilans (Zostaje na koncie)</h3>
-                    <p class="amount" style="color: <?= ($totalIncome - $totalExpense >= 0) ? 'var(--blue-color)' : 'var(--red-color)' ?>;">
+                    <h3>Bilans</h3>
+                    <p class="amount">
                         <?= number_format($totalIncome - $totalExpense, 2, ',', ' ') ?> PLN
                     </p>
                 </div>

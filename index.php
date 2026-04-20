@@ -82,19 +82,16 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="card-icon">💎</div>
                     <h3>Zostaje na koncie</h3>
                     <p class="amount"><?= $balance ?> PLN</p>
-                    <div class="card-glow"></div>
                 </div>
                 <div class="card glass-effect gradient-green">
                     <div class="card-icon">📈</div>
                     <h3>Wpływy w miesiącu</h3>
                     <p class="amount">+<?= $income ?> PLN</p>
-                    <div class="card-glow"></div>
                 </div>
                 <div class="card glass-effect gradient-red">
-                    <div class="card-icon">🔪</div>
+                    <div class="card-icon">🛒</div>
                     <h3>Wydatki w miesiącu</h3>
                     <p class="amount">-<?= $expense ?> PLN</p>
-                    <div class="card-glow"></div>
                 </div>
             </div>
 
@@ -149,28 +146,28 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                             <div class="user-card" style="flex-direction: column; align-items: flex-start; gap: 0.8rem;">
                                 <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
-                                    <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9; width: 40px; height: 40px; flex-shrink: 0;">
+                                     <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44;">
                                         <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
                                     </div>
                                     <div class="user-info" style="flex: 1;">
-                                        <h4 style="font-size: 0.95rem;"><?= htmlspecialchars($u['name']) ?></h4>
-                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>44; color: <?= htmlspecialchars($u['color']) ?>; font-size: 0.75rem;">
+                                        <h4><?= htmlspecialchars($u['name']) ?></h4>
+                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>22; color: <?= htmlspecialchars($u['color']) ?>;">
                                             <?= $showLimit ? 'Limit: '.number_format($userLimit, 0, ',', ' ').' zł' : 'Aktywny' ?>
                                         </span>
                                     </div>
-                                    <div style="font-size: 0.85rem; font-weight: 600;">
+                                    <div style="font-weight: 800; color: var(--primary);">
                                         <?= number_format($userSpent, 2, ',', ' ') ?> zł
                                     </div>
                                 </div>
                                 
                                 <?php if ($showLimit): ?>
-                                    <div style="width: 100%;">
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.3rem; color: var(--text-secondary);">
+                                    <div style="width: 100%; margin-top: 0.5rem;">
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.4rem; color: var(--text-muted); font-weight: 600;">
                                             <span>Zużycie limitu</span>
-                                            <span style="font-weight: 600; color: <?= $percent > 90 ? 'var(--red-color)' : 'var(--text-primary)' ?>;"><?= $percent ?>%</span>
+                                            <span style="color: <?= $percent > 90 ? 'var(--error)' : 'var(--primary)' ?>;"><?= $percent ?>%</span>
                                         </div>
-                                        <div style="width: 100%; height: 6px; background: #eee; border-radius: 10px; overflow: hidden;">
-                                            <div style="width: <?= $percent ?>%; height: 100%; background: <?= $percent > 90 ? 'var(--red-color)' : htmlspecialchars($u['color']) ?>; border-radius: 10px; transition: width 0.5s ease;"></div>
+                                        <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                                            <div style="width: <?= $percent ?>%; height: 100%; background: <?= $percent > 90 ? 'var(--error)' : htmlspecialchars($u['color']) ?>; border-radius: 10px; transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
                                         </div>
                                     </div>
                                 <?php endif; ?>
