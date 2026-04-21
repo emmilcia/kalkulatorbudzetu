@@ -39,7 +39,7 @@ $chartColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'
 
 // --- LOGIKA PROGNOZY (tylko dla obecnego miesiąca) ---
 $isCurrentMonth = ($month == date('Y-m'));
-$projectedBalanceFormatted = null;
+$forecastData = null;
 
 if ($isCurrentMonth) {
     $daysInMonth = (int)date('t');
@@ -53,7 +53,14 @@ if ($isCurrentMonth) {
     $avgDailyExpense = $currentDay > 0 ? (float)$totalExpense / $currentDay : 0;
     $projectedExpenseRemaining = $avgDailyExpense * $daysLeft;
     $projectedEndOfMonthBalance = $currentBalance - $projectedExpenseRemaining;
-    $projectedBalanceFormatted = number_format($projectedEndOfMonthBalance, 2, ',', ' ');
+    
+    $forecastData = [
+        'avg_daily' => $avgDailyExpense,
+        'days_left' => $daysLeft,
+        'projected_expense' => $projectedExpenseRemaining,
+        'final_balance' => $projectedEndOfMonthBalance,
+        'current_balance' => $currentBalance
+    ];
 }
 ?>
 <!DOCTYPE html>
@@ -117,13 +124,41 @@ if ($isCurrentMonth) {
                     <p class="amount" style="color: <?= ($totalIncome - $totalExpense >= 0) ? 'var(--blue-color)' : 'var(--red-color)' ?>;">
                         <?= number_format($totalIncome - $totalExpense, 2, ',', ' ') ?> PLN
                     </p>
-                    <?php if ($projectedBalanceFormatted): ?>
-                        <div class="projected-info" style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary); padding-top: 0.8rem; border-top: 1px dashed var(--border-color); text-align: left;">
-                            Prognoza na koniec miesiąca: <strong><?= $projectedBalanceFormatted ?> zł</strong>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
+
+            <?php if ($forecastData): ?>
+                <section class="forecast-section glass-effect section-box" style="margin-bottom: 2rem; border-left: 8px solid var(--accent-color);">
+                    <div class="section-header">
+                        <h3>Przewidywana przyszłość finansowa 🔮</h3>
+                        <span class="badge" style="background: var(--accent-color); color: white; padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.8rem;">Analiza Smart</span>
+                    </div>
+                    <div class="forecast-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                        <div class="forecast-item">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Średnie dzienne wydatki</p>
+                            <h4 style="font-size: 1.4rem;"><?= number_format($forecastData['avg_daily'], 2, ',', ' ') ?> zł</h4>
+                            <small style="color: var(--text-secondary);">Wyliczone z <?= (int)date('j') ?> dni</small>
+                        </div>
+                        <div class="forecast-item">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Dni do końca miesiąca</p>
+                            <h4 style="font-size: 1.4rem;"><?= $forecastData['days_left'] ?> dni</h4>
+                            <small style="color: var(--text-secondary);">Pozostało czasu</small>
+                        </div>
+                        <div class="forecast-item">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Przewidywane wydatki</p>
+                            <h4 style="color: var(--red-color); font-size: 1.4rem;">-<?= number_format($forecastData['projected_expense'], 2, ',', ' ') ?> zł</h4>
+                            <small style="color: var(--text-secondary);">Szacunkowy koszt</small>
+                        </div>
+                        <div class="forecast-item highlighted-result" style="background: var(--bg-color); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--border-color);">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Przewidywany stan na koniec</p>
+                            <h4 style="font-size: 1.6rem; color: <?= $forecastData['final_balance'] >= 0 ? 'var(--green-color)' : 'var(--red-color)' ?>;">
+                                <?= number_format($forecastData['final_balance'], 2, ',', ' ') ?> zł
+                            </h4>
+                            <small style="font-weight: 600;"><?= $forecastData['final_balance'] >= 0 ? '✅ Będziesz na plusie!' : '⚠️ Może zabraknąć środków' ?></small>
+                        </div>
+                    </div>
+                </section>
+            <?php endif; ?>
 
             <div class="content-grid">
                 <section class="glass-effect section-box">

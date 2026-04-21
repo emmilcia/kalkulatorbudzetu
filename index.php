@@ -37,18 +37,6 @@ $stmt = $db->query("
     ORDER BY t.date DESC, t.id DESC LIMIT 15
 ");
 $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// --- LOGIKA PROGNOZY ---
-$daysInMonth = (int)date('t');
-$currentDay = (int)date('j');
-$daysLeft = $daysInMonth - $currentDay;
-
-$totalMonthlyExpense = isset($monthlyStats['expense']) ? (float)$monthlyStats['expense'] : 0;
-$avgDailyExpense = $currentDay > 0 ? $totalMonthlyExpense / $currentDay : 0;
-$projectedExpenseRemaining = $avgDailyExpense * $daysLeft;
-$projectedEndOfMonthBalance = $balanceRaw - $projectedExpenseRemaining;
-
-$projectedBalanceFormatted = number_format($projectedEndOfMonthBalance, 2, ',', ' ');
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -94,9 +82,6 @@ $projectedBalanceFormatted = number_format($projectedEndOfMonthBalance, 2, ',', 
                     <div class="card-icon">💎</div>
                     <h3>Zostaje na koncie</h3>
                     <p class="amount"><?= $balance ?> PLN</p>
-                    <div class="projected-info" title="Prognoza na koniec miesiąca oparta na Twoich wydatkach">
-                        Prognoza: <strong><?= $projectedBalanceFormatted ?> zł</strong>
-                    </div>
                     <div class="card-glow"></div>
                 </div>
                 <div class="card glass-effect gradient-green">

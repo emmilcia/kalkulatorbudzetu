@@ -183,16 +183,39 @@ body {
     border: 1px solid var(--border-color);
 }
 
-.projected-info {
-    margin-top: 1rem;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    padding-top: 0.8rem;
-    border-top: 1px dashed var(--border-color);
+.projected-info { display: none; } /* Usunięto ze strony głównej */
+
+/* Forecast Section in Reports */
+.forecast-section {
+    position: relative;
+    overflow: hidden;
 }
 
-.projected-info strong {
-    color: var(--text-primary);
+.forecast-grid {
+    margin-top: 1rem;
+}
+
+.forecast-item h4 {
+    margin: 0.2rem 0;
+    font-weight: 700;
+}
+
+.forecast-item small {
+    display: block;
+    margin-top: 0.2rem;
+}
+
+.highlighted-result {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+}
+
+.badge {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
 }
 
 .section-header {
