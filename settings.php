@@ -220,6 +220,10 @@ $unreadCount = count($unreadNotifs);
                 </div>
             </div>
         </main>
+        <!-- Stopka -->
+        <footer class="app-footer">
+            Made by <span>Emilia Dudzik</span>
+        </footer>
     </div>
     <script>
         function toggleNotifs() {

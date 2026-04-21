@@ -60,6 +60,7 @@ body {
     flex-direction: column;
     gap: 3rem;
     animation: softFade 1s ease-out;
+    min-height: calc(100vh - 4rem);
 }
 
 @keyframes softFade {
@@ -660,4 +661,18 @@ input:focus, select:focus {
     color: var(--accent);
     text-decoration: none;
     font-weight: 700;
+}
+.app-footer {
+    margin-top: auto;
+    padding: 1.5rem 0 0.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.3px;
+}
+
+.app-footer span {
+    font-weight: 700;
+    color: var(--accent);
 }

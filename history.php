@@ -198,6 +198,10 @@ $unreadCount = count($unreadNotifs);
                 </div>
             </section>
         </main>
+        <!-- Stopka -->
+        <footer class="app-footer">
+            Made by <span>Emilia Dudzik</span>
+        </footer>
     </div>
 
     <script>
