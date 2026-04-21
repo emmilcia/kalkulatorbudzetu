@@ -48,6 +48,14 @@ try {
             INSERT INTO goals (name, target_amount, current_amount, icon, color) 
             VALUES ('Wakacyjne marzenia', 5000, 1200, '🏖️', '#3b82f6'), 
                    ('Nowy ekspres do kawy', 800, 150, '☕', '#d7b5a1');
+
+            CREATE TABLE IF NOT EXISTS notifications (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                type TEXT NOT NULL,
+                message TEXT NOT NULL,
+                is_read INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
         ");
     }
 
@@ -68,6 +76,14 @@ try {
             current_amount REAL DEFAULT 0,
             color TEXT DEFAULT '#d7b5a1',
             icon TEXT DEFAULT '🎯'
+        )");
+    try {
+        $db->exec("CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            type TEXT NOT NULL,
+            message TEXT NOT NULL,
+            is_read INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )");
     } catch (Exception $e) {}
 } catch (Exception $e) {
