@@ -35,6 +35,8 @@ $totals = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 $totalExpense = $totals['expense'] ?? 0;
 $totalIncome = $totals['income'] ?? 0;
 
+$chartLabels = array_column($expensesByCategory, 'name');
+$chartData = array_column($expensesByCategory, 'total');
 $chartColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#64748b', '#84cc16'];
 
 // --- LOGIKA PROGNOZY (tylko dla obecnego miesiąca) ---
@@ -96,7 +98,7 @@ if ($isCurrentMonth) {
         <!-- Główna zawartość -->
         <main class="main-content">
             <header class="topbar" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
-                <div>
+                <div style="text-align: left;">
                     <h2 class="greeting">Raporty i analizy 📈</h2>
                     <p class="subtitle">Zarządzaj i poznaj szczegóły domowego budżetu.</p>
                 </div>

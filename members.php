@@ -43,7 +43,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Główna zawartość -->
         <main class="main-content">
             <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
+                <div style="text-align: left;">
                     <h2 class="greeting">Nasi domownicy 👨‍👩‍👧‍👦</h2>
                     <p class="subtitle">Zarządzaj osobami, które mają wpływ na domowy budżet.</p>
                 </div>
