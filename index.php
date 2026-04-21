@@ -210,11 +210,11 @@ $unreadCount = count($unreadNotifs);
                                     </div>
                                     <div class="user-info" style="flex: 1;">
                                         <h4 style="font-size: 0.95rem;"><?= htmlspecialchars($u['name']) ?></h4>
-                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>44; color: <?= htmlspecialchars($u['color']) ?>; font-size: 0.75rem;">
+                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>44; color: <?= htmlspecialchars($u['color']) ?>; font-size: 0.75rem; white-space: nowrap;">
                                             <?= $showLimit ? 'Limit: '.number_format($userLimit, 0, ',', ' ').' zł' : 'Aktywny' ?>
                                         </span>
                                     </div>
-                                    <div style="font-size: 0.85rem; font-weight: 600;">
+                                    <div style="font-size: 0.85rem; font-weight: 600; white-space: nowrap;">
                                         <?= number_format($userSpent, 2, ',', ' ') ?> zł
                                     </div>
                                 </div>
@@ -223,10 +223,10 @@ $unreadCount = count($unreadNotifs);
                                     <div style="width: 100%;">
                                         <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.3rem; color: var(--text-secondary);">
                                             <span>Zużycie limitu</span>
-                                            <span style="font-weight: 600; color: <?= $percent > 90 ? 'var(--red-color)' : 'var(--text-primary)' ?>;"><?= $percent ?>%</span>
+                                            <span style="font-weight: 600; color: <?= $percent > 90 ? 'var(--error)' : 'var(--text-primary)' ?>;"><?= $percent ?>%</span>
                                         </div>
                                         <div style="width: 100%; height: 6px; background: #eee; border-radius: 10px; overflow: hidden;">
-                                            <div style="width: <?= $percent ?>%; height: 100%; background: <?= $percent > 90 ? 'var(--red-color)' : htmlspecialchars($u['color']) ?>; border-radius: 10px; transition: width 0.5s ease;"></div>
+                                            <div style="width: <?= $clampedPercent ?>%; height: 100%; background: <?= $percent > 90 ? 'var(--error)' : ($percent > 65 ? '#f59e0b' : '#10b981') ?>; border-radius: 10px; transition: width 0.5s ease;"></div>
                                         </div>
                                         <?php if ($remaining > 0): ?>
                                             <div style="font-size: 0.7rem; color: var(--text-secondary); background: #f8fafc; padding: 4px 8px; border-radius: 6px; display: inline-block;">
