@@ -140,38 +140,73 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h3>Kto wydaje?</h3>
                     </div>
                     <div class="users-list">
+                        <?php 
+                        $daysInMonth = (int)date('t');
+                        $currentDay = (int)date('j');
+                        $remainingDays = $daysInMonth - $currentDay + 1;
+                        ?>
                         <?php foreach($users as $u): ?>
                             <?php 
                                 $userSpent = (float)$u['spent'];
                                 $userLimit = (float)$u['monthly_limit'];
                                 $showLimit = $userLimit > 0;
-                                $percent = $showLimit ? min(100, round(($userSpent / $userLimit) * 100)) : 0;
+                                $percent = $showLimit ? round(($userSpent / $userLimit) * 100) : 0;
+                                $clampedPercent = min(100, $percent);
+                                
+                                // Zaawansowana logika kolorów
+                                $statusColor = htmlspecialchars($u['color']);
+                                $statusText = "Aktywny";
+                                if ($showLimit) {
+                                    if ($percent > 100) {
+                                        $statusColor = "var(--red-color)";
+                                        $statusText = "Przekroczono!";
+                                    } elseif ($percent > 85) {
+                                        $statusColor = "#f59e0b"; // Orange
+                                        $statusText = "Uwaga!";
+                                    } elseif ($percent > 65) {
+                                        $statusColor = "#fbbf24"; // Yellow
+                                        $statusText = "Półmetek";
+                                    }
+                                }
+
+                                $remaining = $userLimit - $userSpent;
+                                $daily = $remaining > 0 ? $remaining / $remainingDays : 0;
                             ?>
-                            <div class="user-card" style="flex-direction: column; align-items: flex-start; gap: 0.8rem;">
+                            <div class="user-card" style="flex-direction: column; align-items: flex-start; gap: 0.8rem; border-left: 5px solid <?= $statusColor ?>;">
                                 <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
                                     <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9; width: 40px; height: 40px; flex-shrink: 0;">
                                         <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
                                     </div>
                                     <div class="user-info" style="flex: 1;">
                                         <h4 style="font-size: 0.95rem;"><?= htmlspecialchars($u['name']) ?></h4>
-                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>44; color: <?= htmlspecialchars($u['color']) ?>; font-size: 0.75rem;">
-                                            <?= $showLimit ? 'Limit: '.number_format($userLimit, 0, ',', ' ').' zł' : 'Aktywny' ?>
+                                        <span class="user-badge" style="background-color: <?= $statusColor ?>22; color: <?= $statusColor ?>; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">
+                                            <?= $statusText ?>
                                         </span>
                                     </div>
-                                    <div style="font-size: 0.85rem; font-weight: 600;">
-                                        <?= number_format($userSpent, 2, ',', ' ') ?> zł
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 0.9rem; font-weight: 700;"><?= number_format($userSpent, 2, ',', ' ') ?> zł</div>
+                                        <?php if ($showLimit): ?>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">z <?= number_format($userLimit, 0, ',', ' ') ?> zł</div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 
                                 <?php if ($showLimit): ?>
                                     <div style="width: 100%;">
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.3rem; color: var(--text-secondary);">
-                                            <span>Zużycie limitu</span>
-                                            <span style="font-weight: 600; color: <?= $percent > 90 ? 'var(--red-color)' : 'var(--text-primary)' ?>;"><?= $percent ?>%</span>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.4rem;">
+                                            <div style="color: var(--text-secondary);">
+                                                Pozostało: <strong style="color: <?= $remaining > 0 ? 'var(--green-color)' : 'var(--red-color)' ?>;"><?= number_format($remaining, 2, ',', ' ') ?> zł</strong>
+                                            </div>
+                                            <div style="font-weight: 700; color: <?= $statusColor ?>;"><?= $percent ?>%</div>
                                         </div>
-                                        <div style="width: 100%; height: 6px; background: #eee; border-radius: 10px; overflow: hidden;">
-                                            <div style="width: <?= $percent ?>%; height: 100%; background: <?= $percent > 90 ? 'var(--red-color)' : htmlspecialchars($u['color']) ?>; border-radius: 10px; transition: width 0.5s ease;"></div>
+                                        <div style="width: 100%; height: 8px; background: #eee; border-radius: 10px; overflow: hidden; margin-bottom: 0.4rem;">
+                                            <div style="width: <?= $clampedPercent ?>%; height: 100%; background: <?= $statusColor ?>; border-radius: 10px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
                                         </div>
+                                        <?php if ($remaining > 0): ?>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary); background: #f8fafc; padding: 4px 8px; border-radius: 6px; display: inline-block;">
+                                                Możesz wydawać: <strong><?= number_format($daily, 2, ',', ' ') ?> zł / dzień</strong>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
