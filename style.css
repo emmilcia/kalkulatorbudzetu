@@ -171,7 +171,7 @@ body {
 }
 
 .card {
-    padding: 2.5rem 2rem;
+    padding: 1.5rem 1rem;
     border-radius: var(--br-lg);
     position: relative;
     overflow: hidden;
@@ -179,7 +179,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     background: var(--surface);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-md);
@@ -191,22 +191,24 @@ body {
 }
 
 .card h3 {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
 }
 
 .card .amount {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: var(--primary);
+    white-space: nowrap;
 }
-
+ 
 .card-icon {
-    font-size: 2.4rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
     opacity: 0.9;
 }
 
