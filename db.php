@@ -31,11 +31,6 @@ try {
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (category_id) REFERENCES categories(id)
             );
-            
-            INSERT INTO users (name, color) VALUES ('Mama', '#ec4899'), ('Tata', '#3b82f6'), ('Młodzież', '#8b5cf6');
-            INSERT INTO categories (name, type) VALUES ('Wynagrodzenie', 'income'), ('Kieszonkowe', 'income'), ('Prezenty', 'income');
-            INSERT INTO categories (name, type) VALUES ('Mieszkanie', 'expense'), ('Jedzenie', 'expense'), ('Paliwo i Transport', 'expense'), ('Rozrywka i Hobby', 'expense'), ('Ubrania', 'expense'), ('Edukacja', 'expense'), ('Zdrowie', 'expense');
-            
             CREATE TABLE IF NOT EXISTS goals (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
@@ -44,11 +39,6 @@ try {
                 color TEXT DEFAULT '#d7b5a1',
                 icon TEXT DEFAULT '🎯'
             );
-
-            INSERT INTO goals (name, target_amount, current_amount, icon, color) 
-            VALUES ('Wakacyjne marzenia', 5000, 1200, '🏖️', '#3b82f6'), 
-                   ('Nowy ekspres do kawy', 800, 150, '☕', '#d7b5a1');
-
             CREATE TABLE IF NOT EXISTS notifications (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 type TEXT NOT NULL,
@@ -56,18 +46,15 @@ try {
                 is_read INTEGER DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+            INSERT INTO users (name, color) VALUES ('Mama', '#ec4899'), ('Tata', '#3b82f6'), ('Młodzież', '#8b5cf6');
+            INSERT INTO categories (name, type) VALUES ('Wynagrodzenie', 'income'), ('Kieszonkowe', 'income'), ('Prezenty', 'income');
+            INSERT INTO categories (name, type) VALUES ('Mieszkanie', 'expense'), ('Jedzenie', 'expense'), ('Paliwo i Transport', 'expense'), ('Rozrywka i Hobby', 'expense'), ('Ubrania', 'expense'), ('Edukacja', 'expense'), ('Zdrowie', 'expense');
         ");
     }
 
     // Migracje dla istniejących baz
-    try {
-        $db->exec("ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT 'cat1'");
-    } catch (Exception $e) {}
-    
-    try {
-        $db->exec("ALTER TABLE users ADD COLUMN monthly_limit REAL DEFAULT 0");
-    } catch (Exception $e) {}
-
+    try { $db->exec("ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT 'cat1'"); } catch (Exception $e) {}
+    try { $db->exec("ALTER TABLE users ADD COLUMN monthly_limit REAL DEFAULT 0"); } catch (Exception $e) {}
     try {
         $db->exec("CREATE TABLE IF NOT EXISTS goals (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,6 +64,7 @@ try {
             color TEXT DEFAULT '#d7b5a1',
             icon TEXT DEFAULT '🎯'
         )");
+    } catch (Exception $e) {}
     try {
         $db->exec("CREATE TABLE IF NOT EXISTS notifications (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,6 +74,7 @@ try {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )");
     } catch (Exception $e) {}
+
 } catch (Exception $e) {
     die("Błąd połączenia z bazą danych: " . $e->getMessage());
 }

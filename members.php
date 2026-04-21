@@ -9,6 +9,8 @@ $stmt = $db->query("
     GROUP BY u.id 
     ORDER BY u.name
 ");
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Pobierz nieprzeczytane powiadomienia
 $unreadNotifs = $db->query("SELECT * FROM notifications WHERE is_read = 0 ORDER BY created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
 $unreadCount = count($unreadNotifs);
@@ -33,42 +35,41 @@ $unreadCount = count($unreadNotifs);
                 <h1>Skarbonka</h1>
             </div>
 
-            <!-- Centrum Powiadomień -->
-            <div class="notif-center">
-                <div class="notif-bell" onclick="toggleNotifs()">
-                    🔔
-                    <?php if ($unreadCount > 0): ?>
-                        <div class="notif-badge"><?= $unreadCount ?></div>
-                    <?php endif; ?>
-                </div>
-                <div class="notif-panel" id="notifPanel">
-                    <div class="notif-header">
-                        <h4>Powiadomienia</h4>
-                        <?php if ($unreadCount > 0): ?>
-                            <a href="clear_notifications.php" style="font-size: 0.7rem; color: var(--accent); text-decoration: none;">Oznacz jako przeczytane</a>
-                        <?php endif; ?>
-                    </div>
-                    <div class="notif-list">
-                        <?php if ($unreadCount === 0): ?>
-                            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1.5rem;">Brak nowych powiadomień</p>
-                        <?php else: ?>
-                            <?php foreach($unreadNotifs as $n): ?>
-                                <div class="notif-item <?= htmlspecialchars($n['type']) ?>">
-                                    <?= htmlspecialchars($n['message']) ?>
-                                    <small><?= date('H:i', strtotime($n['created_at'])) ?></small>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-            
             <nav class="top-nav">
                 <a href="index.php">Pulpit</a>
                 <a href="members.php" class="active">Rodzina</a>
                 <a href="history.php">Historia</a>
                 <a href="reports.php">Raporty</a>
                 <a href="settings.php">Ustawienia</a>
+                <!-- Centrum Powiadomień -->
+                <div class="notif-center">
+                    <div class="notif-bell" onclick="toggleNotifs()">
+                        🔔
+                        <?php if ($unreadCount > 0): ?>
+                            <div class="notif-badge"><?= $unreadCount ?></div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="notif-panel" id="notifPanel">
+                        <div class="notif-header">
+                            <h4>Powiadomienia</h4>
+                            <?php if ($unreadCount > 0): ?>
+                                <a href="clear_notifications.php" style="font-size: 0.7rem; color: var(--accent); text-decoration: none;">Oznacz jako przeczytane</a>
+                            <?php endif; ?>
+                        </div>
+                        <div class="notif-list">
+                            <?php if ($unreadCount === 0): ?>
+                                <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1.5rem;">Brak nowych powiadomień</p>
+                            <?php else: ?>
+                                <?php foreach($unreadNotifs as $n): ?>
+                                    <div class="notif-item <?= htmlspecialchars($n['type']) ?>">
+                                        <?= htmlspecialchars($n['message']) ?>
+                                        <small><?= date('H:i', strtotime($n['created_at'])) ?></small>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </header>
 

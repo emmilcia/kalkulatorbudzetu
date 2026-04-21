@@ -546,43 +546,49 @@ input:focus, select:focus {
     transform: translateX(5px);
 }
 
-/* Notification Center */
+/* Notification Center - in nav bar */
 .notif-center {
     position: relative;
-    z-index: 100;
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    border-left: 1px solid var(--border);
 }
 
 .notif-bell {
     position: relative;
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    background: var(--surface);
-    width: 48px;
-    height: 48px;
+    background: transparent;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
-    border: 1px solid var(--border);
+    border-radius: var(--br-full);
+    border: none;
     transition: var(--transition);
-    color: var(--primary);
+    color: var(--text-muted);
 }
 
 .notif-bell:hover {
-    transform: scale(1.05) rotate(10deg);
-    border-color: var(--accent);
+    background: var(--bg-color);
+    color: var(--primary);
+    transform: rotate(10deg);
 }
 
 .notif-badge {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: 2px;
+    right: 2px;
     background: var(--error);
     color: white;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 800;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -592,11 +598,11 @@ input:focus, select:focus {
 
 .notif-panel {
     position: absolute;
-    top: 60px;
+    top: 50px;
     right: 0;
-    width: 320px;
-    max-height: 400px;
-    background: rgba(255, 255, 255, 0.9);
+    width: 300px;
+    max-height: 380px;
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(15px);
     border-radius: var(--br-lg);
     border: 1px solid var(--border);
@@ -604,6 +610,7 @@ input:focus, select:focus {
     display: none;
     flex-direction: column;
     overflow: hidden;
+    z-index: 1000;
 }
 
 .notif-header {
