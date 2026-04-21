@@ -43,7 +43,7 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rodzinny Kalkulator Budżetu</title>
+    <title>Skarbonka</title>
     <!-- Nowoczesna czcionka -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,13 +55,14 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Pasek górny -->
         <header class="app-header">
             <div class="logo">
-                <div class="logo-icon">☕</div>
-                <h1>KalkoBudżet</h1>
+                <div class="logo-icon">🐷</div>
+                <h1>Skarbonka</h1>
             </div>
             
             <nav class="top-nav">
                 <a href="index.php" class="active">Pulpit</a>
                 <a href="members.php">Rodzina</a>
+                <a href="history.php">Historia</a>
                 <a href="reports.php">Raporty</a>
                 <a href="settings.php">Ustawienia</a>
             </nav>
