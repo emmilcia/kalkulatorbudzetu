@@ -82,19 +82,16 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="card-icon">💎</div>
                     <h3>Zostaje na koncie</h3>
                     <p class="amount"><?= $balance ?> PLN</p>
-                    <div class="card-glow"></div>
                 </div>
                 <div class="card glass-effect gradient-green">
                     <div class="card-icon">📈</div>
                     <h3>Wpływy w miesiącu</h3>
                     <p class="amount">+<?= $income ?> PLN</p>
-                    <div class="card-glow"></div>
                 </div>
                 <div class="card glass-effect gradient-red">
-                    <div class="card-icon">🔪</div>
+                    <div class="card-icon">🛒</div>
                     <h3>Wydatki w miesiącu</h3>
                     <p class="amount">-<?= $expense ?> PLN</p>
-                    <div class="card-glow"></div>
                 </div>
             </div>
 
@@ -174,33 +171,28 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                             <div class="user-card" style="flex-direction: column; align-items: flex-start; gap: 0.8rem; border-left: 5px solid <?= $statusColor ?>;">
                                 <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
-                                    <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9; width: 40px; height: 40px; flex-shrink: 0;">
+                                     <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44;">
                                         <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
                                     </div>
                                     <div class="user-info" style="flex: 1;">
                                         <h4 style="font-size: 0.95rem;"><?= htmlspecialchars($u['name']) ?></h4>
-                                        <span class="user-badge" style="background-color: <?= $statusColor ?>22; color: <?= $statusColor ?>; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">
-                                            <?= $statusText ?>
+                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>44; color: <?= htmlspecialchars($u['color']) ?>; font-size: 0.75rem;">
+                                            <?= $showLimit ? 'Limit: '.number_format($userLimit, 0, ',', ' ').' zł' : 'Aktywny' ?>
                                         </span>
                                     </div>
-                                    <div style="text-align: right;">
-                                        <div style="font-size: 0.9rem; font-weight: 700;"><?= number_format($userSpent, 2, ',', ' ') ?> zł</div>
-                                        <?php if ($showLimit): ?>
-                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">z <?= number_format($userLimit, 0, ',', ' ') ?> zł</div>
-                                        <?php endif; ?>
+                                    <div style="font-size: 0.85rem; font-weight: 600;">
+                                        <?= number_format($userSpent, 2, ',', ' ') ?> zł
                                     </div>
                                 </div>
                                 
                                 <?php if ($showLimit): ?>
                                     <div style="width: 100%;">
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.4rem;">
-                                            <div style="color: var(--text-secondary);">
-                                                Pozostało: <strong style="color: <?= $remaining > 0 ? 'var(--green-color)' : 'var(--red-color)' ?>;"><?= number_format($remaining, 2, ',', ' ') ?> zł</strong>
-                                            </div>
-                                            <div style="font-weight: 700; color: <?= $statusColor ?>;"><?= $percent ?>%</div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.3rem; color: var(--text-secondary);">
+                                            <span>Zużycie limitu</span>
+                                            <span style="font-weight: 600; color: <?= $percent > 90 ? 'var(--red-color)' : 'var(--text-primary)' ?>;"><?= $percent ?>%</span>
                                         </div>
-                                        <div style="width: 100%; height: 8px; background: #eee; border-radius: 10px; overflow: hidden; margin-bottom: 0.4rem;">
-                                            <div style="width: <?= $clampedPercent ?>%; height: 100%; background: <?= $statusColor ?>; border-radius: 10px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+                                        <div style="width: 100%; height: 6px; background: #eee; border-radius: 10px; overflow: hidden;">
+                                            <div style="width: <?= $percent ?>%; height: 100%; background: <?= $percent > 90 ? 'var(--red-color)' : htmlspecialchars($u['color']) ?>; border-radius: 10px; transition: width 0.5s ease;"></div>
                                         </div>
                                         <?php if ($remaining > 0): ?>
                                             <div style="font-size: 0.7rem; color: var(--text-secondary); background: #f8fafc; padding: 4px 8px; border-radius: 6px; display: inline-block;">

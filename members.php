@@ -52,31 +52,31 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="content-grid" style="grid-template-columns: 1fr; margin-top: 2rem;">
                 <section class="family-members glass-effect section-box">
-                    <div class="users-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <div class="users-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
                         <?php foreach($users as $u): ?>
-                            <div class="user-card" style="justify-content: space-between;">
-                                <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44; background-color: #f1f5f9;">
+                            <div class="user-card" style="border-left-color: <?= htmlspecialchars($u['color']) ?>; padding: 1.5rem;">
+                                <div style="display: flex; align-items: center; gap: 1.25rem; flex: 1;">
+                                    <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44;">
                                         <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
                                     </div>
                                     <div class="user-info">
-                                        <h4><?= htmlspecialchars($u['name']) ?></h4>
-                                        <span style="font-size: 0.8rem; color: #718096; background: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 12px;">Wpisy: <?= $u['tx_count'] ?></span>
+                                        <h4 style="font-size: 1.2rem;"><?= htmlspecialchars($u['name']) ?></h4>
+                                        <span class="user-badge" style="background-color: <?= htmlspecialchars($u['color']) ?>22; color: <?= htmlspecialchars($u['color']) ?>;">Wpisy: <?= $u['tx_count'] ?></span>
                                     </div>
                                 </div>
-                                <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                    <button type="button" class="btn-edit" title="Edytuj członka rodziny" onclick="openEditMemberModal(<?= $u['id'] ?>, '<?= htmlspecialchars(addslashes($u['name'])) ?>', '<?= htmlspecialchars($u['color']) ?>', '<?= htmlspecialchars($u['avatar'] ?? 'micah') ?>', <?= $u['monthly_limit'] ?? 0 ?>)">✎</button>
+                                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                                    <button type="button" class="btn-edit" title="Edytuj" onclick="openEditMemberModal(<?= $u['id'] ?>, '<?= htmlspecialchars(addslashes($u['name'])) ?>', '<?= htmlspecialchars($u['color']) ?>', '<?= htmlspecialchars($u['avatar'] ?? 'micah') ?>', <?= $u['monthly_limit'] ?? 0 ?>)" style="background: white; color: var(--accent); border: 1px solid var(--border); width: 44px; height: 44px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition);">✎</button>
                                     <form action="delete_member.php" method="POST" style="margin: 0;" onsubmit="return confirm('Na pewno usunąć tę osobę?<?= $u['tx_count'] > 0 ? '\n\nUWAGA: Trwale usunięte zostaną również wszystkie jej wpisy i transakcje (' . $u['tx_count'] . ')!' : '' ?>');">
                                         <input type="hidden" name="id" value="<?= $u['id'] ?>">
-                                        <button type="submit" class="btn-delete" title="Usuń członka rodziny">×</button>
+                                        <button type="submit" class="btn-delete" title="Usuń" style="width: 44px; height: 44px;">×</button>
                                     </form>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                         
                         <!-- Przycisk dodawania jako karta -->
-                        <div class="user-card" style="justify-content: center; cursor: pointer; border: 2px dashed #cbd5e1; background: rgba(255,255,255,0.3);" onclick="openMemberModal()">
-                            <span style="font-size: 2rem; color: #94a3b8; font-weight: 300;">+</span>
+                        <div class="user-card" style="justify-content: center; cursor: pointer; border: 2px dashed var(--border); background: rgba(255,255,255,0.3); min-height: 100px; transition: var(--transition);" onclick="openMemberModal()" onmouseover="this.style.borderColor='var(--accent)';" onmouseout="this.style.borderColor='var(--border)';" >
+                            <span style="font-size: 2.5rem; color: var(--text-muted); font-weight: 300;">+</span>
                         </div>
                     </div>
                 </section>
