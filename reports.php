@@ -35,10 +35,26 @@ $totals = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 $totalExpense = $totals['expense'] ?? 0;
 $totalIncome = $totals['income'] ?? 0;
 
-$chartLabels = array_column($expensesByCategory, 'name');
-$chartData = array_column($expensesByCategory, 'total');
 $chartColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#64748b', '#84cc16'];
 
+// --- LOGIKA PROGNOZY (tylko dla obecnego miesiąca) ---
+$isCurrentMonth = ($month == date('Y-m'));
+$projectedBalanceFormatted = null;
+
+if ($isCurrentMonth) {
+    $daysInMonth = (int)date('t');
+    $currentDay = (int)date('j');
+    $daysLeft = $daysInMonth - $currentDay;
+
+    // Pobierz całkowity bilans (z db.php / wszystkich czasów) dla bazy obliczeń
+    $stmtBalance = $db->query("SELECT SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) as balance FROM transactions");
+    $currentBalance = (float)$stmtBalance->fetch(PDO::FETCH_ASSOC)['balance'];
+
+    $avgDailyExpense = $currentDay > 0 ? (float)$totalExpense / $currentDay : 0;
+    $projectedExpenseRemaining = $avgDailyExpense * $daysLeft;
+    $projectedEndOfMonthBalance = $currentBalance - $projectedExpenseRemaining;
+    $projectedBalanceFormatted = number_format($projectedEndOfMonthBalance, 2, ',', ' ');
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -101,6 +117,11 @@ $chartColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'
                     <p class="amount" style="color: <?= ($totalIncome - $totalExpense >= 0) ? 'var(--blue-color)' : 'var(--red-color)' ?>;">
                         <?= number_format($totalIncome - $totalExpense, 2, ',', ' ') ?> PLN
                     </p>
+                    <?php if ($projectedBalanceFormatted): ?>
+                        <div class="projected-info" style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary); padding-top: 0.8rem; border-top: 1px dashed var(--border-color); text-align: left;">
+                            Prognoza na koniec miesiąca: <strong><?= $projectedBalanceFormatted ?> zł</strong>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 

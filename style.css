@@ -183,6 +183,18 @@ body {
     border: 1px solid var(--border-color);
 }
 
+.projected-info {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding-top: 0.8rem;
+    border-top: 1px dashed var(--border-color);
+}
+
+.projected-info strong {
+    color: var(--text-primary);
+}
+
 .section-header {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
