@@ -1,4 +1,9 @@
 <?php
+/*
+  Główny pulpit naszej Skarbonki.
+  Tutaj zbieramy wszystkie najważniejsze info: kto ile wydał, co ostatnio kupiliśmy itp.
+*/
+
 require_once 'db.php';
 
 // Pobierz uzytkowników z podliczeniem wydatków w tym miesiącu
@@ -11,24 +16,25 @@ $stmt = $db->prepare("
 $stmt->execute([$currentMonth . '%']);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Pobierz kategorie ułożone w grupy wg typu
+// Pobierz kategorie ułożone w grupy wg typu (żeby w modalu było ładnie)
 $stmt = $db->query("SELECT * FROM categories ORDER BY type, name");
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Pobierz podsumowanie
+// Podliczenie ogólnego salda (wszystko co mamy)
 $stmt = $db->query("SELECT SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) as balance FROM transactions");
 $balanceRaw = $stmt->fetch(PDO::FETCH_ASSOC)['balance'];
 $balance = $balanceRaw ? number_format($balanceRaw, 2, ',', ' ') : "0,00";
 
-// Podsumowanie na obecny miesiąc
-$currentMonth = date('Y-m');
+// Statystyki na obecny miesiąc - chcemy wiedzieć czy jesteśmy na plusie czy minusie
+$currentMonthStr = date('Y-m');
 $stmt = $db->prepare("SELECT type, SUM(amount) as total FROM transactions WHERE date LIKE ? GROUP BY type");
-$stmt->execute([$currentMonth . '%']);
+$stmt->execute([$currentMonthStr . '%']);
 $monthlyStats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
 $income = isset($monthlyStats['income']) ? number_format($monthlyStats['income'], 2, ',', ' ') : "0,00";
 $expense = isset($monthlyStats['expense']) ? number_format($monthlyStats['expense'], 2, ',', ' ') : "0,00";
 
-// Pobierz ostatnie 10 transakcji
+// Pobierz ostatnie 15 transakcji - nie chcemy za długiej listy na start
 $stmt = $db->query("
     SELECT t.*, u.name as user_name, u.color, c.name as category_name 
     FROM transactions t 
@@ -38,7 +44,7 @@ $stmt = $db->query("
 ");
 $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Pobierz nieprzeczytane powiadomienia
+// Sprawdzamy czy są jakieś nowe powiadomienia (np. ktoś przekroczył limit?)
 $unreadNotifs = $db->query("SELECT * FROM notifications WHERE is_read = 0 ORDER BY created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
 $unreadCount = count($unreadNotifs);
 ?>
@@ -110,7 +116,7 @@ $unreadCount = count($unreadNotifs);
                 </div>
             </header>
 
-            <!-- Karty podsumowania -->
+            <!-- Karty podsumowania - najważniejsze cyferki -->
             <div class="dashboard-cards">
                 <div class="card glass-effect gradient-blue">
                     <div class="card-icon">💎</div>
@@ -206,6 +212,7 @@ $unreadCount = count($unreadNotifs);
                             <div class="user-card" style="flex-direction: column; align-items: flex-start; gap: 0.8rem; border-left: 5px solid <?= $statusColor ?>;">
                                 <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
                                      <div class="user-avatar" style="border-color: <?= htmlspecialchars($u['color']) ?>; box-shadow: 0 0 15px <?= htmlspecialchars($u['color']) ?>44;">
+                                        <!-- Avatary z RoboHash - fajny bajer, każda osoba ma swój unikalny -->
                                         <img src="https://robohash.org/<?= urlencode($u['avatar'] ?? 'cat1') ?>.png?set=set4&size=150x150" alt="<?= htmlspecialchars($u['name']) ?>">
                                     </div>
                                     <div class="user-info" style="flex: 1;">

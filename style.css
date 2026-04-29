@@ -1,15 +1,18 @@
+/* 
+   Główne kolorki i ustawienia globalne. 
+   Staram się trzymać ciepłej, domowej palety (Cozy Warm Palette).
+*/
 :root {
-    /* Cozy Warm Palette */
-    --primary: #4a3728;
-    --accent: #d97b5c;
+    --primary: #4a3728;      /* Ciemny brąz, do tekstów i nagłówków */
+    --accent: #d97b5c;       /* Taki ceglasty, fajnie pasuje do brązu */
     --accent-hover: #c66a4d;
     
-    --success: #7e9a82;
-    --error: #c96d6d;
-    --warning: #d9a05c;
+    --success: #7e9a82;      /* Przyjemna zieleń na plusy */
+    --error: #c96d6d;        /* Czerwony na minusy i błędy */
+    --warning: #d9a05c;      
     --info: #7b97a6;
 
-    --bg-color: #fcf9f2;
+    --bg-color: #fcf9f2;     /* Kremowe tło, żeby nie raziło w oczy */
     --surface: #ffffff;
     --surface-glass: rgba(255, 255, 255, 0.8);
     
@@ -18,7 +21,7 @@
     
     --border: #ece2d0;
     
-    /* Soft Cozy Effects */
+    /* Cienie i zaokrąglenia - żeby wszystko było miękkie */
     --shadow-sm: 0 2px 4px rgba(74, 55, 40, 0.05);
     --shadow-md: 0 8px 16px rgba(74, 55, 40, 0.08);
     --shadow-lg: 0 16px 32px rgba(74, 55, 40, 0.12);
@@ -33,6 +36,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
+/* Reset i podstawy */
 * {
     margin: 0;
     padding: 0;
@@ -42,6 +46,7 @@
 
 body {
     background-color: var(--bg-color);
+    /* Delikatny wzorek kropek w tle, żeby nie było tak pusto */
     background-image: 
         radial-gradient(#ece2d0 1px, transparent 1px);
     background-size: 24px 24px;
@@ -63,18 +68,18 @@ body {
     min-height: calc(100vh - 4rem);
 }
 
+/* Gesty i animacje - żeby było płynnie */
 @keyframes softFade {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Modal Fix & Utility */
+/* Efekty specjalne i glassmorphism */
 .hidden { display: none !important; }
 
-/* Glassmorphism Utility */
 .glass-effect {
     background: var(--surface-glass);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); /* Ten blur musi być mocny, żeby tło nie przeszkadzało */
     -webkit-backdrop-filter: blur(10px);
     border: 2px solid var(--surface);
 }
